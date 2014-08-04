@@ -12,8 +12,9 @@ public class Queen extends SquareOccupier {
 	@Override
 	public boolean markAttackedSquares(SquareOccupier[][] chessboard) {
 		int offsetStart = -mPosition.x;
-		int offsetEnd = Chessboard.chessboardDimension - mPosition.x;
+		int offsetEnd = Chessboard.chessboardDimensionX - mPosition.x;
 		
+		//bishop
 		for(int offset = offsetStart; offset<=offsetEnd; offset++){
 			if(isOnBoard(offset,offset)){
 				boolean successful = markSquare(mPosition.x+offset, mPosition.y+offset, chessboard);
@@ -28,13 +29,16 @@ public class Queen extends SquareOccupier {
 				}
 			}
 		}
-		for(int i = 0 ; i<chessboard.length; i++){
+		
+		//rook
+		int biggerDimension = Chessboard.chessboardDimensionX > Chessboard.chessboardDimensionY ? Chessboard.chessboardDimensionX : Chessboard.chessboardDimensionY;
+		for(int i = 0 ; i<biggerDimension; i++){
 			boolean successful = true;
-			if(i != mPosition.y){
+			if(i != mPosition.y && i < Chessboard.chessboardDimensionY){
 				successful = successful && markSquare(mPosition.x, i, chessboard);
 				
 			}
-			if(i != mPosition.x){
+			if(i != mPosition.x && i < Chessboard.chessboardDimensionX){
 				successful = successful && markSquare(i, mPosition.y, chessboard);
 			}
 			if(!successful){

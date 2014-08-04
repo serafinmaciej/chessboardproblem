@@ -13,9 +13,17 @@ public class ChessboardProblem {
 	public static void main (String args[]){
 		long startTime = System.currentTimeMillis();
 		
-		Chessboard chessboard = new Chessboard(7);
+		Chessboard chessboard = new Chessboard(7,7);
 		ChessboardController controller = new ChessboardController(chessboard);
 		
+		/*ArrayList<SquareOccupier> pieces = new ArrayList<SquareOccupier>();
+		pieces.add(new King(0,0));
+		pieces.add(new King(0,0));
+		pieces.add(new Queen(0,0));
+		pieces.add(new Queen(0,0));
+		pieces.add(new Rook(0,0));
+		controller.findUniqueConfigsForPieces(pieces);
+		*/
 		ArrayList<SquareOccupier> pieces = new ArrayList<SquareOccupier>();
 		pieces.add(new King(0,0));
 		pieces.add(new King(0,0));
@@ -26,7 +34,7 @@ public class ChessboardProblem {
 		pieces.add(new Knight(0,0));
 		controller.findUniqueConfigsForPieces(pieces);
 		
-		//chessboard.addRandomPiece();
+		chessboard.addRandomPiece();
 		//chessboard.printCurrentChessboard();
 		
 		long endTime = System.currentTimeMillis();

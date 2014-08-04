@@ -12,7 +12,7 @@ public class Bishop extends SquareOccupier {
 	@Override
 	public boolean markAttackedSquares(SquareOccupier[][] chessboard) {
 		int offsetStart = -mPosition.x;
-		int offsetEnd = Chessboard.chessboardDimension - mPosition.x;
+		int offsetEnd = Chessboard.chessboardDimensionX - mPosition.x;
 		
 		for(int offset = offsetStart; offset<=offsetEnd; offset++){
 			if(isOnBoard(offset,offset)){

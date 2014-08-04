@@ -1,32 +1,34 @@
 package chessboard;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import square.SquareOccupier;
-import utils.DeepCopier;
 
 
 public class ChessboardController {
 	private Chessboard mChessboard;
 	private ArrayList<ChessboardResult> mResults = new ArrayList<ChessboardResult>();
-	
+	private long mStartTime;
+	private HashMap<String, String> map = new HashMap<String, String>();
 	public ChessboardController(Chessboard chessboard){
 		mChessboard = chessboard;
 	}
 	
 	public void findUniqueConfigsForPieces(ArrayList<SquareOccupier> pieces){
+		mStartTime = System.currentTimeMillis();
 		ArrayList<SquareOccupier> placedPieces = new ArrayList<SquareOccupier>(1);
 		SquareOccupier pieceToPlace = pieces.remove(0);
 		placedPieces.add(pieceToPlace);
-		for(int i = 0; i < Chessboard.chessboardDimension; i++){
-			for(int j = 0; j < Chessboard.chessboardDimension; j++){
+		for(int i = 0; i < Chessboard.chessboardDimensionX; i++){
+			for(int j = 0; j < Chessboard.chessboardDimensionY; j++){
 				pieceToPlace.setPosition(new Point(i,j));
 				performCheckFor(placedPieces,pieces);
 			}
 		}
 		
 		for(int i = 0; i<mResults.size(); i++){
-			System.out.println(mResults.get(i).toString());
+			System.out.println(i+": "+mResults.get(i).toString());
 		}
 		System.out.println("Found "+mResults.size()+" configurations");
 	}
@@ -39,20 +41,17 @@ public class ChessboardController {
 		else{
 			ArrayList<Point> freeSquares = mChessboard.getNotAttackedSquaresForPieces(placedPieces);
 			if(freeSquares == null || freeSquares.isEmpty()){
-				freeSquares = null;
-				placedPieces.clear();
-				piecesToPlace.clear();
 				return;
 			}
 			else{
-				ArrayList<SquareOccupier> newPiecesToPlace = DeepCopier.getDeepCopy(piecesToPlace);
-				ArrayList<SquareOccupier> newPlacedPieces =  DeepCopier.getDeepCopy(placedPieces);
+				//ArrayList<SquareOccupier> newPiecesToPlace = DeepCopier.getDeepCopy(piecesToPlace);
+				//ArrayList<SquareOccupier> newPlacedPieces =  DeepCopier.getDeepCopy(placedPieces);
 				//System.out.println("deep");
-				//ArrayList<SquareOccupier> newPiecesToPlace = (ArrayList<SquareOccupier>) piecesToPlace.clone();
-				//ArrayList<SquareOccupier> newPlacedPieces =  (ArrayList<SquareOccupier>) placedPieces.clone();
+				ArrayList<SquareOccupier> newPiecesToPlace = (ArrayList<SquareOccupier>) piecesToPlace.clone();
+				ArrayList<SquareOccupier> newPlacedPieces =  (ArrayList<SquareOccupier>) placedPieces.clone();
 				SquareOccupier pieceToPlace = newPiecesToPlace.remove(0);
-				
 				newPlacedPieces.add(pieceToPlace);
+				
 				for(int i = 0; i< freeSquares.size(); i++){
 					pieceToPlace.setPosition(freeSquares.get(i));
 					performCheckFor(newPlacedPieces, newPiecesToPlace);
@@ -77,7 +76,13 @@ public class ChessboardController {
 				mResults.add(result);
 				//System.out.println("Saving: "+result.toString());
 				//System.out.println("found: ");
-				mChessboard.printCurrentChessboard();
+				if(mResults.size() % 5000 == 0){
+					System.out.println("Current progress: "+mResults.size());
+					long executionTime = System.currentTimeMillis() - mStartTime;
+					System.out.println("Execution time: "+executionTime);
+					mChessboard.printCurrentChessboard();
+				}
+				
 			}
 			//else{
 				//System.out.println("_found duplicate: ");

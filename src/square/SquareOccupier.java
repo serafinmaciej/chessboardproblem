@@ -58,8 +58,8 @@ public class SquareOccupier implements Comparable<SquareOccupier> {
 	}
 	
 	protected boolean isOnBoard(int xOffset, int yOffset){
-		boolean isOnChessboardX = mPosition.x + xOffset < Chessboard.chessboardDimension && mPosition.x + xOffset >= 0;
-		boolean isOnChessboardY = mPosition.y + yOffset < Chessboard.chessboardDimension && mPosition.y + yOffset >= 0;
+		boolean isOnChessboardX = mPosition.x + xOffset < Chessboard.chessboardDimensionX && mPosition.x + xOffset >= 0;
+		boolean isOnChessboardY = mPosition.y + yOffset < Chessboard.chessboardDimensionY && mPosition.y + yOffset >= 0;
 		boolean isCurrentSquare = (xOffset == 0 && yOffset == 0);
 		return isOnChessboardX && isOnChessboardY && !isCurrentSquare;
 	}
@@ -73,7 +73,7 @@ public class SquareOccupier implements Comparable<SquareOccupier> {
 	}
 	
 	private int getFieldNo(){
-		int result = mPosition.y * Chessboard.chessboardDimension + mPosition.x;
+		int result = mPosition.y * Chessboard.chessboardDimensionX + mPosition.x;
 		return result;
 	}
 }

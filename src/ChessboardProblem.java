@@ -40,7 +40,7 @@ public class ChessboardProblem {
 	private static void printElapsedTime(long startTime){
 		long endTime = System.currentTimeMillis();
 		long executionTime = endTime - startTime;
-		System.out.println("Execution time: "+executionTime);
+		System.out.println("Execution time: "+executionTime + " ms");
 	}
 	
 	private static void printHelp(){

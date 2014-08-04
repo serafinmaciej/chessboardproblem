@@ -14,7 +14,6 @@ import utils.ArrayCopier;
 public class ChessboardController {
 	private Chessboard mChessboard;
 
-	private long mStartTime;
 	private HashMap<String, String> mMap = new HashMap<String, String>();
 
 	private boolean mVerbose = false;
@@ -41,7 +40,6 @@ public class ChessboardController {
 	 */
 	public HashMap<String, String> findUniqueConfigsForPieces(ArrayList<SquareOccupier> pieces){
 		mMap = new HashMap<String, String>();
-		mStartTime = System.currentTimeMillis();
 		ArrayList<SquareOccupier> placedPieces = new ArrayList<SquareOccupier>(1);
 		SquareOccupier pieceToPlace = pieces.remove(0);
 		placedPieces.add(pieceToPlace);
@@ -112,8 +110,6 @@ public class ChessboardController {
 	private void verbose(){
 		if(mMap.keySet().size() % mVerboseOffset == 0){
 			System.out.println("Current progress: "+mMap.keySet().size());
-			long executionTime = System.currentTimeMillis() - mStartTime;
-			System.out.println("Execution time: "+executionTime);
 			mChessboard.printCurrentChessboard();
 		}
 	}

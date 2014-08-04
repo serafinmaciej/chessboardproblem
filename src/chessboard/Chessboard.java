@@ -53,8 +53,8 @@ public class Chessboard {
 	 * Prints last specified chessboard
 	 */
 	public void printCurrentChessboard(){
-		for(int i = 0; i<chessboardDimensionX; i++){
-			for(int j = 0; j<chessboardDimensionY; j++){
+		for(int j = 0; j<chessboardDimensionY; j++){
+			for(int i = 0; i<chessboardDimensionX; i++){
 				String squareText = mChessboard[i][j].getLetter()+" ";
 				System.out.print(squareText);
 			}

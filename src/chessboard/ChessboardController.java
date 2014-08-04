@@ -3,6 +3,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import square.SquareOccupier;
+import utils.DeepCopier;
 
 
 public class ChessboardController {
@@ -23,6 +24,11 @@ public class ChessboardController {
 				performCheckFor(placedPieces,pieces);
 			}
 		}
+		
+		for(int i = 0; i<mResults.size(); i++){
+			System.out.println(mResults.get(i).toString());
+		}
+		System.out.println("Found "+mResults.size()+" configurations");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -39,11 +45,11 @@ public class ChessboardController {
 				return;
 			}
 			else{
-				//ArrayList<SquareOccupier> newPiecesToPlace = DeepCopier.getDeepCopy(piecesToPlace);
-				//ArrayList<SquareOccupier> newPlacedPieces =  DeepCopier.getDeepCopy(placedPieces);
-				
-				ArrayList<SquareOccupier> newPiecesToPlace = (ArrayList<SquareOccupier>) piecesToPlace.clone();
-				ArrayList<SquareOccupier> newPlacedPieces =  (ArrayList<SquareOccupier>) placedPieces.clone();
+				ArrayList<SquareOccupier> newPiecesToPlace = DeepCopier.getDeepCopy(piecesToPlace);
+				ArrayList<SquareOccupier> newPlacedPieces =  DeepCopier.getDeepCopy(placedPieces);
+				//System.out.println("deep");
+				//ArrayList<SquareOccupier> newPiecesToPlace = (ArrayList<SquareOccupier>) piecesToPlace.clone();
+				//ArrayList<SquareOccupier> newPlacedPieces =  (ArrayList<SquareOccupier>) placedPieces.clone();
 				SquareOccupier pieceToPlace = newPiecesToPlace.remove(0);
 				
 				newPlacedPieces.add(pieceToPlace);

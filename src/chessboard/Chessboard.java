@@ -3,7 +3,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import square.EmptySquare;
-import square.Knight;
+import square.Queen;
 import square.SquareOccupier;
 
 
@@ -35,10 +35,12 @@ public class Chessboard {
 		int j = (int) Math.round(Math.random() * (chessboardDimension-1));
 		//Rook rook = new Rook(i,j);
 		//King king = new King(i,j);
-		Knight knight = new Knight(i,j);
-		mChessboard[i][j] = knight;
+		//Knight knight = new Knight(i,j);
+		//Bishop bishop = new Bishop(i, j);
+		Queen queen = new Queen(i,j);
+		mChessboard[i][j] = queen;
 		printCurrentChessboard();
-		knight.markAttackedSquares(mChessboard);
+		queen.markAttackedSquares(mChessboard);
 		printCurrentChessboard();
 	}
 	

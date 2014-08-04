@@ -1,9 +1,8 @@
 package square;
-import java.awt.Point;
 
 public class EmptySquare extends SquareOccupier {
-	public EmptySquare(Point position){
-		super(position);
+	public EmptySquare(int x, int y){
+		super(x,y);
 		mLetter = "-";
 	}
 }

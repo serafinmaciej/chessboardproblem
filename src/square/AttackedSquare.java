@@ -1,11 +1,10 @@
 package square;
-import java.awt.Point;
 
 
 public class AttackedSquare extends SquareOccupier {
 
-	public AttackedSquare(Point position) {
-		super(position);
+	public AttackedSquare(int x, int y){
+		super(x,y);
 		mLetter = "!";
 	}
 

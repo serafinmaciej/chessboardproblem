@@ -1,74 +1,51 @@
 package chessboard;
 import java.awt.Point;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import square.EmptySquare;
-import square.King;
 import square.Knight;
-import square.Rook;
 import square.SquareOccupier;
 
 
 public class Chessboard {
-	public static final String SIMPLE_CHESSBOARD = "SIMPLE_CHESSBOARD";
-	public static final String ATTACKED_CHESSBOARD = "ATTACKED_CHESSBOARD";
-	
 	public static int chessboardDimension;
-	
 	private SquareOccupier [][] mChessboard;
-	private SquareOccupier [][] mAttackedChessboard;
 
-	
-	
 	public Chessboard(int chessboardDimension){
-		this.chessboardDimension = chessboardDimension;
+		Chessboard.chessboardDimension = chessboardDimension;
 		
 		mChessboard = new SquareOccupier[chessboardDimension][];
 		for(int i = 0; i< chessboardDimension; i++){
 			mChessboard[i] = new SquareOccupier[chessboardDimension];
 		}
-		
-		mAttackedChessboard = new SquareOccupier[chessboardDimension][];
-		for(int i = 0; i< chessboardDimension; i++){
-			mAttackedChessboard[i] = new SquareOccupier[chessboardDimension];
-		}
 		reset();
 	}
 	
-	public int getSize(){
-		return chessboardDimension;
-	}
-	public void printCurrentChessboard(String chessboardToPrint){
-		if(chessboardToPrint.equals(SIMPLE_CHESSBOARD)){
-			printCurrentChessboard(mChessboard);
+	public ArrayList<Point> getNotAttackedSquaresForPieces(ArrayList<SquareOccupier> pieces) {
+		boolean successfulPlaceOnBoard = placePiecesOnBoard(pieces);
+		if(!successfulPlaceOnBoard){
+			return null;
 		}
-		else if(chessboardToPrint.equals(ATTACKED_CHESSBOARD)){
-			printCurrentChessboard(mAttackedChessboard);
-		}
+		ArrayList<Point> squares = getNotAttackedSquares();
+		return squares;
 	}
-	
+
 	public void addRandomPiece(){
 		int i = (int) Math.round(Math.random() * (chessboardDimension-1));
 		int j = (int) Math.round(Math.random() * (chessboardDimension-1));
-		Rook rook = new Rook(i,j);
-		King king = new King(i,j);
+		//Rook rook = new Rook(i,j);
+		//King king = new King(i,j);
 		Knight knight = new Knight(i,j);
 		mChessboard[i][j] = knight;
-		mAttackedChessboard[i][j] = knight;
-		printCurrentChessboard(SIMPLE_CHESSBOARD);
-		knight.markAttackedSquares(mAttackedChessboard);
-		printCurrentChessboard(ATTACKED_CHESSBOARD);
+		printCurrentChessboard();
+		knight.markAttackedSquares(mChessboard);
+		printCurrentChessboard();
 	}
 	
-	public void reset(){
-		reset(mChessboard);
-		reset(mAttackedChessboard);
-	}
-	
-	private void printCurrentChessboard(SquareOccupier [][] chessboardToPrint){
+	public void printCurrentChessboard(){
 		for(int i = 0; i<chessboardDimension; i++){
 			for(int j = 0; j<chessboardDimension; j++){
-				String squareText = chessboardToPrint[i][j].getLetter()+" ";
+				String squareText = mChessboard[i][j].getLetter()+" ";
 				System.out.print(squareText);
 			}
 			System.out.println();
@@ -76,33 +53,33 @@ public class Chessboard {
 		System.out.println();
 	}
 	
-	private void reset(SquareOccupier [][] chessboardToReset){
+	private void reset(){
 		for(int i = 0; i<chessboardDimension; i++){
 			for(int j = 0; j<chessboardDimension; j++){
-				chessboardToReset[i][j] = new EmptySquare(i,j);
+				mChessboard[i][j] = new EmptySquare(i,j);
 			}
 		}
 	}
-
-	public Vector<Point> getAvailableSpotsForPieces(Vector<SquareOccupier> pieces) {
-		reset(mAttackedChessboard);
-		boolean successfulSpotSelection = true;
+	
+	private boolean placePiecesOnBoard(ArrayList<SquareOccupier> pieces){
+		reset();
+		boolean successfulPlaceOnBoard = true;
 		for(SquareOccupier piece : pieces){
-			mAttackedChessboard[piece.getPosition().x][piece.getPosition().y] = piece;
-			successfulSpotSelection = successfulSpotSelection && piece.markAttackedSquares(mAttackedChessboard);
+			mChessboard[piece.getPosition().x][piece.getPosition().y] = piece;
+			successfulPlaceOnBoard = successfulPlaceOnBoard && piece.markAttackedSquares(mChessboard);
 		}
-		if(!successfulSpotSelection){
-			return null;
-		}
-		Vector<Point> points = new Vector<Point>();
+		return successfulPlaceOnBoard;
+	}
+	
+	private ArrayList<Point> getNotAttackedSquares(){
+		ArrayList<Point> squares = new ArrayList<Point>();
 		for(int i = 0; i<chessboardDimension; i++){
 			for(int j = 0; j<chessboardDimension; j++){
-				if(mAttackedChessboard[i][j].getLetter().equals("-")){
-					points.add(new Point(i,j));
+				if(mChessboard[i][j] instanceof EmptySquare){
+					squares.add(new Point(i,j));
 				}
 			}
 		}
-		//printCurrentChessboard(mAttackedChessboard);
-		return points;
+		return squares;
 	}
 }

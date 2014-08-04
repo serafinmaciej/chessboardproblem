@@ -8,10 +8,10 @@ public class King extends SquareOccupier {
 	
 	@Override
 	public boolean markAttackedSquares(SquareOccupier[][] chessboard) {
-		for(int i = -1; i <= 1; i++){
-			for(int j = -1; j <=1 ; j++){
-				if(isOnBoard(i,j,chessboard.length)){
-					boolean succesful = markSquare(mPosition.x+i,mPosition.y+j,chessboard);
+		for(int xOffset = -1; xOffset <= 1; xOffset++){
+			for(int yOffset = -1; yOffset <=1 ; yOffset++){
+				if(isOnBoard(xOffset,yOffset)){
+					boolean succesful = markSquare(mPosition.x+xOffset,mPosition.y+yOffset,chessboard);
 					if(!succesful){
 						return false;
 					}

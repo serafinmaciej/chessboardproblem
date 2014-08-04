@@ -9,12 +9,14 @@ public class Knight extends SquareOccupier {
 	
 	@Override
 	public boolean markAttackedSquares(SquareOccupier[][] chessboard) {
-		for(int i = -2 ; i<=2; i++){
-			if(i==0) continue;
-			for(int j = -2 ; j<=2; j++){
-				if(i==j || i == -j || j==0) continue;
-				if(isOnBoard(i,j,chessboard.length)){
-					boolean successful = markSquare(mPosition.x+i, mPosition.y+j, chessboard);
+		for(int xOffset = -2 ; xOffset<=2; xOffset++){
+			if(xOffset==0) continue;
+			for(int yOffset = -2 ; yOffset<=2; yOffset++){
+				if(ignoreOffset(xOffset, yOffset)){
+					continue;
+				}
+				else if(isOnBoard(xOffset,yOffset)){
+					boolean successful = markSquare(mPosition.x+xOffset, mPosition.y+yOffset, chessboard);
 					if(!successful){
 						return false;
 					}
@@ -22,5 +24,9 @@ public class Knight extends SquareOccupier {
 			}
 		}
 		return true;
+	}
+	
+	private boolean ignoreOffset(int xOffset, int yOffset){
+		return xOffset==yOffset || xOffset == -yOffset || yOffset==0;
 	}
 }

@@ -1,4 +1,5 @@
-import java.util.Vector;
+import java.sql.Date;
+import java.util.ArrayList;
 
 import square.Knight;
 import square.Rook;
@@ -9,10 +10,12 @@ import chessboard.ChessboardController;
 
 public class Main {
 	public static void main (String args[]){
+		long startTime = System.currentTimeMillis();
+		
 		Chessboard chessboard = new Chessboard(4);
 		ChessboardController controller = new ChessboardController(chessboard);
 		
-		Vector<SquareOccupier> pieces = new Vector<SquareOccupier>();
+		ArrayList<SquareOccupier> pieces = new ArrayList<SquareOccupier>();
 		pieces.add(new Knight(0,0));
 		pieces.add(new Knight(0,0));
 		pieces.add(new Knight(0,0));
@@ -21,6 +24,8 @@ public class Main {
 		pieces.add(new Rook(0,0));
 		controller.findUniqueConfigsForPieces(pieces);
 		
-		//chessboard.addRandomPiece();
+		long endTime = System.currentTimeMillis();
+		long executionTime = endTime - startTime;
+		System.out.println("Execution time: "+executionTime);
 	}
 }

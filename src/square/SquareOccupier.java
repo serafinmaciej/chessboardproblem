@@ -33,15 +33,10 @@ public class SquareOccupier implements Comparable<SquareOccupier> {
 		return true;
 	}
 
-	private int getFieldNo(){
-		int result = mPosition.y * Chessboard.chessboardDimension + mPosition.x;
-		//System.out.println("("+mPosition.x+","+mPosition.y+"): "+result);
-		return result;
-	}
-	
-	@Override
-	public int compareTo(SquareOccupier o) {
-		return getFieldNo() - o.getFieldNo();
+	public boolean isIdentical(SquareOccupier occupier){
+		boolean identicalClass = (this.getClass() == occupier.getClass());
+		boolean identicalPosition = (this.compareTo(occupier) == 0);
+		return identicalClass && identicalPosition;
 	}
 	
 	public SquareOccupier clone(){
@@ -57,10 +52,15 @@ public class SquareOccupier implements Comparable<SquareOccupier> {
 		
 	}
 	
-	protected boolean isOnBoard(int i, int j, int chessboardSize){
-		boolean isOnChessboardX = mPosition.x + i < chessboardSize && mPosition.x + i >= 0;
-		boolean isOnChessboardY = mPosition.y + j < chessboardSize && mPosition.y + j >= 0;
-		boolean isCurrentSquare = (i == 0 && j == 0);
+	@Override
+	public int compareTo(SquareOccupier o) {
+		return getFieldNo() - o.getFieldNo();
+	}
+	
+	protected boolean isOnBoard(int xOffset, int yOffset){
+		boolean isOnChessboardX = mPosition.x + xOffset < Chessboard.chessboardDimension && mPosition.x + xOffset >= 0;
+		boolean isOnChessboardY = mPosition.y + yOffset < Chessboard.chessboardDimension && mPosition.y + yOffset >= 0;
+		boolean isCurrentSquare = (xOffset == 0 && yOffset == 0);
 		return isOnChessboardX && isOnChessboardY && !isCurrentSquare;
 	}
 	
@@ -70,5 +70,10 @@ public class SquareOccupier implements Comparable<SquareOccupier> {
 			return true;
 		}
 		return false;
+	}
+	
+	private int getFieldNo(){
+		int result = mPosition.y * Chessboard.chessboardDimension + mPosition.x;
+		return result;
 	}
 }

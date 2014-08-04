@@ -4,36 +4,66 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import square.SquareOccupier;
+import utils.ArrayCopier;
 
-
+/**
+ * Main class responsible for finding actual results
+ * @author Maciek
+ *
+ */
 public class ChessboardController {
 	private Chessboard mChessboard;
-	private ArrayList<ChessboardResult> mResults = new ArrayList<ChessboardResult>();
+
 	private long mStartTime;
-	private HashMap<String, String> map = new HashMap<String, String>();
+	private HashMap<String, String> mMap = new HashMap<String, String>();
+
+	private boolean mVerbose = false;
+	private int mVerboseOffset;
+	
+	
 	public ChessboardController(Chessboard chessboard){
 		mChessboard = chessboard;
 	}
 	
-	public void findUniqueConfigsForPieces(ArrayList<SquareOccupier> pieces){
+	/**
+	 * Sets verbose mode on
+	 * @param verboseOffset board will be printed every verboseOffset chessboard found
+	 */
+	public void verboseEvery(int verboseOffset){
+		mVerbose = true;
+		mVerboseOffset = verboseOffset;
+	}
+	
+	/**
+	 * Finds configurations in which neither of specified pieces attack each other
+	 * @param pieces pieces on board
+	 * @return HashMap with results
+	 */
+	public HashMap<String, String> findUniqueConfigsForPieces(ArrayList<SquareOccupier> pieces){
+		mMap = new HashMap<String, String>();
 		mStartTime = System.currentTimeMillis();
 		ArrayList<SquareOccupier> placedPieces = new ArrayList<SquareOccupier>(1);
 		SquareOccupier pieceToPlace = pieces.remove(0);
 		placedPieces.add(pieceToPlace);
 		for(int i = 0; i < Chessboard.chessboardDimensionX; i++){
 			for(int j = 0; j < Chessboard.chessboardDimensionY; j++){
-				pieceToPlace.setPosition(new Point(i,j));
+				pieceToPlace.setPosition(i,j);
 				performCheckFor(placedPieces,pieces);
 			}
 		}
 		
-		for(int i = 0; i<mResults.size(); i++){
-			System.out.println(i+": "+mResults.get(i).toString());
-		}
-		System.out.println("Found "+mResults.size()+" configurations");
+		long executionTime = System.currentTimeMillis() - mStartTime;
+		System.out.println("Found "+mMap.keySet().size() +" configurations in "+executionTime+" ms");
+		return mMap;
 	}
 
-	@SuppressWarnings("unchecked")
+	
+	/**
+	 * Method that is supposed to be called recursively. 
+	 * At every iteration one piece from piecesToPlace array is placed in good position on-board and moved to placedPieces array
+	 * @param placedPieces pieces that are placed on board in good position
+	 * @param piecesToPlace pieces that have to be placed
+	 */
 	private void performCheckFor(ArrayList<SquareOccupier> placedPieces, ArrayList<SquareOccupier> piecesToPlace) {
 		if(piecesToPlace.size() == 0){
 			saveUniqueResult(placedPieces);
@@ -44,11 +74,9 @@ public class ChessboardController {
 				return;
 			}
 			else{
-				//ArrayList<SquareOccupier> newPiecesToPlace = DeepCopier.getDeepCopy(piecesToPlace);
-				//ArrayList<SquareOccupier> newPlacedPieces =  DeepCopier.getDeepCopy(placedPieces);
-				//System.out.println("deep");
-				ArrayList<SquareOccupier> newPiecesToPlace = (ArrayList<SquareOccupier>) piecesToPlace.clone();
-				ArrayList<SquareOccupier> newPlacedPieces =  (ArrayList<SquareOccupier>) placedPieces.clone();
+				ArrayList<SquareOccupier> newPiecesToPlace = ArrayCopier.getShallowCopy(piecesToPlace);
+				ArrayList<SquareOccupier> newPlacedPieces = ArrayCopier.getShallowCopy(placedPieces);
+
 				SquareOccupier pieceToPlace = newPiecesToPlace.remove(0);
 				newPlacedPieces.add(pieceToPlace);
 				
@@ -64,30 +92,28 @@ public class ChessboardController {
 		ArrayList<Point> places = mChessboard.getNotAttackedSquaresForPieces(placedPieces);
 		if(places != null){
 			ChessboardResult result = new ChessboardResult(placedPieces);
-			boolean uniqueResult = true;
-			for(int i = 0; i <mResults.size(); i++){
-				ChessboardResult storedResult = mResults.get(i);
-				if(storedResult.isIdentical(result)){
-					uniqueResult = false;
-					break;
+			
+			String key = result.toString();
+			String storedValue = mMap.get(key);
+			if(storedValue == null){
+				mMap.put(key, key);
+				if(mVerbose){
+					verbose();
 				}
 			}
-			if(uniqueResult){
-				mResults.add(result);
-				//System.out.println("Saving: "+result.toString());
-				//System.out.println("found: ");
-				if(mResults.size() % 5000 == 0){
-					System.out.println("Current progress: "+mResults.size());
-					long executionTime = System.currentTimeMillis() - mStartTime;
-					System.out.println("Execution time: "+executionTime);
-					mChessboard.printCurrentChessboard();
-				}
-				
+			else if(!storedValue.equals(key)){
+				System.out.println("!!COLLISION");
+				System.out.println("storedValue: "+storedValue+" key: "+key);
 			}
-			//else{
-				//System.out.println("_found duplicate: ");
-				//mChessboard.printCurrentChessboard(Chessboard.ATTACKED_CHESSBOARD);
-			//}
+		}
+	}
+	
+	private void verbose(){
+		if(mMap.keySet().size() % mVerboseOffset == 0){
+			System.out.println("Current progress: "+mMap.keySet().size());
+			long executionTime = System.currentTimeMillis() - mStartTime;
+			System.out.println("Execution time: "+executionTime);
+			mChessboard.printCurrentChessboard();
 		}
 	}
 }

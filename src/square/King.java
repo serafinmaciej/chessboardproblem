@@ -1,5 +1,10 @@
 package square;
 
+/**
+* Class describing a king
+* @author Maciek
+*
+*/
 public class King extends SquareOccupier {
 	public King(int x, int y){
 		super(x,y);

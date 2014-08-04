@@ -1,6 +1,10 @@
 package square;
 
-
+/**
+* Class describing a knight
+* @author Maciek
+*
+*/
 public class Knight extends SquareOccupier {
 	public Knight(int x, int y){
 		super(x,y);

@@ -2,7 +2,11 @@ package square;
 
 import chessboard.Chessboard;
 
-
+/**
+ * Class describing bishop
+ * @author Maciek
+ *
+ */
 public class Bishop extends SquareOccupier {
 	public Bishop(int x, int y){
 		super(x,y);

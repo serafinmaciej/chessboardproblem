@@ -2,21 +2,27 @@ package chessboard;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import square.Bishop;
 import square.EmptySquare;
-import square.King;
-import square.Knight;
-import square.Queen;
-import square.Rook;
 import square.SquareOccupier;
 
 
+/**
+ * Class handling chessboard. Allows to get list of not attacked squares with list of pieces specified
+ * Also allows to print current chesboard
+ * @author Maciek
+ *
+ */
 public class Chessboard {
 	public static int chessboardDimensionX;
-	public static int chessboardDimensionY
-	;
+	public static int chessboardDimensionY;
+	
 	private SquareOccupier [][] mChessboard;
 
+	/**
+	 * Constructor, specify M and N as input
+	 * @param chessboardDimensionX x dimension - M
+	 * @param chessboardDimensionY y dimension - N
+	 */
 	public Chessboard(int chessboardDimensionX, int chessboardDimensionY){
 		Chessboard.chessboardDimensionX = chessboardDimensionX;
 		Chessboard.chessboardDimensionY = chessboardDimensionY;
@@ -28,6 +34,12 @@ public class Chessboard {
 		reset();
 	}
 	
+	/**
+	 * Method returns list of squares that are not attacked by either of specified pieces
+	 * Returns null if there is an error - e.g some of specified pieces attack each other
+	 * @param pieces list of pieces on chessboard
+	 * @return list of free squares, or null if error
+	 */
 	public ArrayList<Point> getNotAttackedSquaresForPieces(ArrayList<SquareOccupier> pieces) {
 		boolean successfulPlaceOnBoard = placePiecesOnBoard(pieces);
 		if(!successfulPlaceOnBoard){
@@ -36,23 +48,10 @@ public class Chessboard {
 		ArrayList<Point> squares = getNotAttackedSquares();
 		return squares;
 	}
-
-	public void addRandomPiece(){
-		int i = (int) Math.round(Math.random() * (chessboardDimensionX-1));
-		int j = (int) Math.round(Math.random() * (chessboardDimensionY-1));
-		Rook rook = new Rook(i,j);
-		King king = new King(i,j);
-		Knight knight = new Knight(i,j);
-		Bishop bishop = new Bishop(i, j);
-		Queen queen = new Queen(i,j);
-		mChessboard[i][j] = bishop;
-		printCurrentChessboard();
-		boolean successful = bishop.markAttackedSquares(mChessboard);
-		
-		printCurrentChessboard();
-		System.out.println("successful: "+successful);
-	}
 	
+	/**
+	 * Prints last specified chessboard
+	 */
 	public void printCurrentChessboard(){
 		for(int i = 0; i<chessboardDimensionX; i++){
 			for(int j = 0; j<chessboardDimensionY; j++){
@@ -78,6 +77,9 @@ public class Chessboard {
 		for(SquareOccupier piece : pieces){
 			mChessboard[piece.getPosition().x][piece.getPosition().y] = piece;
 			successfulPlaceOnBoard = successfulPlaceOnBoard && piece.markAttackedSquares(mChessboard);
+			if(!successfulPlaceOnBoard){
+				break;
+			}
 		}
 		return successfulPlaceOnBoard;
 	}

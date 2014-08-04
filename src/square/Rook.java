@@ -2,7 +2,11 @@ package square;
 
 import chessboard.Chessboard;
 
-
+/**
+* Class describing a rook
+* @author Maciek
+*
+*/
 public class Rook extends SquareOccupier {
 	public Rook(int x, int y){
 		super(x,y);

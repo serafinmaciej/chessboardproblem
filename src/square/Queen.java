@@ -2,7 +2,11 @@ package square;
 
 import chessboard.Chessboard;
 
-
+/**
+* Class describing a queen
+* @author Maciek
+*
+*/
 public class Queen extends SquareOccupier {
 	public Queen(int x, int y){
 		super(x,y);
@@ -36,7 +40,6 @@ public class Queen extends SquareOccupier {
 			boolean successful = true;
 			if(i != mPosition.y && i < Chessboard.chessboardDimensionY){
 				successful = successful && markSquare(mPosition.x, i, chessboard);
-				
 			}
 			if(i != mPosition.x && i < Chessboard.chessboardDimensionX){
 				successful = successful && markSquare(i, mPosition.y, chessboard);

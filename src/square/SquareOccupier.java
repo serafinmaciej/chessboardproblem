@@ -4,6 +4,11 @@ import java.lang.reflect.Constructor;
 
 import chessboard.Chessboard;
 
+/**
+* Parent-class describing a single square on board
+* @author Maciek
+*
+*/
 public class SquareOccupier implements Comparable<SquareOccupier> {
 	protected String mLetter = "";
 	protected Point mPosition = new Point(0,0);
@@ -12,46 +17,69 @@ public class SquareOccupier implements Comparable<SquareOccupier> {
 		mPosition = new Point(x,y);
 	}
 	
+	/**
+	 * Returns a letter connected with this square occupier
+	 * @return
+	 */
 	public String getLetter(){
 		return mLetter;
 	}
-	
+
+	/**
+	 * Sets on-board position
+	 * @param x x position
+	 * @param y y position
+	 */
 	public void setPosition(int x, int y){
 		mPosition.x = x;
 		mPosition.y = y;
 	}
 	
+	/**
+	 * Sets on-board position
+	 * @param position position
+	 */
 	public void setPosition(Point position){
 		mPosition = position;
 	}
 	
+	/**
+	 * Returns current square occupier position
+	 * @return the position
+	 */
 	public Point getPosition(){
 		return mPosition;
 	}
 
+	/**
+	 * Method marks squares that are attacked by this square ocuppier
+	 * Method to override in each extending class
+	 * Method returns false if there is an error in board - current piece is attacking other
+	 * @param chessboard 
+	 * @return true if square marking went OK, false if error
+	 */
 	public boolean markAttackedSquares(SquareOccupier[][] chessboard) {
 		return true;
 	}
-
-	public boolean isIdentical(SquareOccupier occupier){
-		boolean identicalClass = (this.getClass() == occupier.getClass());
-		boolean identicalPosition = (this.compareTo(occupier) == 0);
-		return identicalClass && identicalPosition;
-	}
 	
+	/**
+	 * Method using reflection in order to clone this object
+	 */
 	public SquareOccupier clone(){
 		SquareOccupier clonedObject = null;
 		try {
 			Class<? extends SquareOccupier> currentClass = getClass();
 			Constructor<? extends SquareOccupier> constructor = currentClass.getConstructor(int.class, int.class);
-			clonedObject = (SquareOccupier) constructor.newInstance(mPosition.x, mPosition.y);;
+			clonedObject = (SquareOccupier) constructor.newInstance(mPosition.x, mPosition.y);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
 		return clonedObject;
-		
 	}
 	
+	/**
+	 * Method for implementing Comparable interface
+	 */
 	@Override
 	public int compareTo(SquareOccupier o) {
 		return getFieldNo() - o.getFieldNo();

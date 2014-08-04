@@ -51,9 +51,6 @@ public class ChessboardController {
 				performCheckFor(placedPieces,pieces);
 			}
 		}
-		
-		long executionTime = System.currentTimeMillis() - mStartTime;
-		System.out.println("Found "+mMap.keySet().size() +" configurations in "+executionTime+" ms");
 		return mMap;
 	}
 
@@ -88,6 +85,10 @@ public class ChessboardController {
 		}
 	}
 	
+	/**
+	 * Method saves result if it hasn't already been found earlier
+	 * @param placedPieces placed pieces
+	 */
 	private void saveUniqueResult(ArrayList<SquareOccupier> placedPieces){
 		ArrayList<Point> places = mChessboard.getNotAttackedSquaresForPieces(placedPieces);
 		if(places != null){

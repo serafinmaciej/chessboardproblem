@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 import chessboard.Chessboard;
 import chessboard.ChessboardController;
 import utils.Config;
@@ -28,7 +30,8 @@ public class ChessboardProblem {
 				}
 				
 				long startTime = System.currentTimeMillis();
-				controller.findUniqueConfigsForPieces(config.pieces);
+				HashMap<String, String> resultsMap = controller.findUniqueConfigsForPieces(config.pieces);
+				System.out.println("Found "+resultsMap.keySet().size() +" configurations.");
 				printElapsedTime(startTime);
 			}
 		}

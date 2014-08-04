@@ -1,7 +1,7 @@
 package square;
 
 /**
-* Class describing empty square, on which neither of pieces is placed and neither is attacking
+* Class describing an empty square, on which neither of pieces is placed and neither is attacking
 * @author Maciek
 *
 */

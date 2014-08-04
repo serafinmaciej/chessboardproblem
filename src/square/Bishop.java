@@ -3,7 +3,7 @@ package square;
 import chessboard.Chessboard;
 
 /**
- * Class describing bishop
+ * Class describing a bishop
  * @author Maciek
  *
  */
